@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ChimeraCoder/anaconda"
-	"github.com/ChimeraCoder/anaconda/garyburd/go-oauth/oauth"
+	"github.com/garyburd/go-oauth/oauth"
 	"github.com/gin-gonic/gin"
 )
 
