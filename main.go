@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/garyburd/go-oauth/oauth"
@@ -12,8 +14,8 @@ var credential *oauth.Credentials
 var api *anaconda.TwitterApi
 
 func getTwitterApi() *anaconda.TwitterApi {
-	anaconda.SetConsumerKey("KsWKFfrrKnNfrNms7ZE7VEzVU")
-	anaconda.SetConsumerSecret("a6hKnH3rTNUaOim4muDrScgKJ76oAzzI90VBXKo5Ejssu5lBcs")
+	anaconda.SetConsumerKey("")
+	anaconda.SetConsumerSecret("")
 	return anaconda.NewTwitterApi(
 		"",
 		"",
@@ -40,7 +42,18 @@ func main() {
 			panic(err)
 		}
 		api = anaconda.NewTwitterApi(cli.Token, cli.Secret)
-		api.PostTweet("眠い", nil)
+
+		v := url.Values{}
+		v.Set("count", "10")
+
+		tweets, err := api.GetHomeTimeline(v)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, tweet := range tweets {
+			fmt.Printf("%v\n\n", tweet.FullText)
+		}
 	})
 
 	g.Run(":80")
