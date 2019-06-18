@@ -9,8 +9,8 @@ import (
 )
 
 func getTwitterApi() *anaconda.TwitterApi {
-	anaconda.SetConsumerKey("KsWKFfrrKnNfrNms7ZE7VEzVU")
-	anaconda.SetConsumerSecret("a6hKnH3rTNUaOim4muDrScgKJ76oAzzI90VBXKo5Ejssu5lBcs")
+	anaconda.SetConsumerKey("")
+	anaconda.SetConsumerSecret("")
 	return anaconda.NewTwitterApi(
 		"",
 		"",
