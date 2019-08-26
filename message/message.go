@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	config := oauth1.NewConfig("JCL6KkhZO2dHVViWnKaUm6UzJ", "4cEUT6DPlpUWVZcQLqxdGCmDQNFNJZb6U8dGZMdPDQd1ycwhCi")
-	token := oauth1.NewToken("1012877640997339136-YBRdMBSxHerPXHSvj32yKEroIqpDNs", "ifjWZ3zyrOCqbmFxfTgZXVFTz2nxjPjNDBS6I7BRNsxGz")
+	config := oauth1.NewConfig("", "")
+	token := oauth1.NewToken("", "")
 	httpClient := config.Client(oauth1.NoContext, token)
 
 	// Twitter client
