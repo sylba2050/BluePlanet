@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
 	"time"
 
@@ -23,45 +22,53 @@ func main() {
 
 	client := twitter.NewClient(httpClient)
 
-	followers := twitter.FollowerIDParams{
-		ScreenName: "randomb24532179",
-	}
-	followersID, followersRes, _ := client.Followers.IDs(&followers)
-	fmt.Println(followersID.IDs)
-	fmt.Println(followersRes)
+	for range time.Tick(time.Minute * 1) {
+		followers := twitter.FollowerIDParams{
+			ScreenName: "randomb24532179",
+		}
+		followersID, _, _ := client.Followers.IDs(&followers)
 
-	follows := twitter.FriendIDParams{
-		ScreenName: "randomb24532179",
-	}
-	followsID, followsRes, _ := client.Friends.IDs(&follows)
-	fmt.Println(followsID.IDs)
-	fmt.Println(followsRes)
+		follows := twitter.FriendIDParams{
+			ScreenName: "randomb24532179",
+		}
+		followsID, _, _ := client.Friends.IDs(&follows)
 
-	followParam := twitter.FriendshipCreateParams{
-		UserID: followersID.IDs[0],
-	}
-	client.Friendships.Create(&followParam)
+		notFollowing := sliceSub(followersID.IDs, followsID.IDs)
+		notFollower := sliceSub(followsID.IDs, followersID.IDs)
 
-	unfollowParam := twitter.FriendshipDestroyParams{
-		UserID: followersID.IDs[0],
+		fmt.Println(notFollowing)
+		fmt.Println(notFollower)
+		for _, v := range notFollowing {
+			followParam := twitter.FriendshipCreateParams{
+				UserID: v,
+			}
+			client.Friendships.Create(&followParam)
+		}
+
+		for _, v := range notFollower {
+			unfollowParam := twitter.FriendshipDestroyParams{
+				UserID: v,
+			}
+			client.Friendships.Destroy(&unfollowParam)
+		}
 	}
-	client.Friendships.Destroy(&unfollowParam)
 }
 
-func randomChoice(from string) rune {
-	runes := []rune(from)
-
-	rand.Seed(time.Now().Unix())
-	return runes[rand.Intn(len(runes))]
-}
-
-func isInclude(target string, element rune) bool {
-	runes := []rune(target)
-	for _, v := range runes {
+func in(target []int64, element int64) bool {
+	for _, v := range target {
 		if v == element {
 			return true
 		}
 	}
-
 	return false
+}
+
+func sliceSub(a, b []int64) []int64 {
+	var res []int64
+	for _, v := range a {
+		if !in(b, v) {
+			res = append(res, v)
+		}
+	}
+	return res
 }
